@@ -1,0 +1,36 @@
+---
+
+- name: GCP images have sudo but not doas
+  become: True
+  become_method: sudo
+  package:
+    name: doas
+    state: present
+
+- name: doas.conf
+  become: True
+  become_method: sudo
+  lineinfile:
+    path: /usr/local/etc/doas.conf
+    line: "permit nopass :google-sudoers as root"
+    create: True
+    mode: "0600"
+
+- name: doas test
+  tags: doas
+  become: True
+  become_method: doas
+  # With become_user doas suceeds
+  become_user: root
+  file:
+    path: /root/become-test
+    state: touch
+
+- name: Reproduce https://github.com/ansible/ansible/issues/57934
+  tags: doas 
+  become: True
+  become_method: doas
+  # Without become_user doas does not try
+  package:
+    name: vim-console
+    state: latest

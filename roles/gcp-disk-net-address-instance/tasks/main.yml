@@ -1,0 +1,48 @@
+---
+
+- name: disk
+  gcp_compute_disk:
+    name: "disk-{{ instance }}"
+    size_gb: 50
+    state: present
+  register: disk
+
+- name: network that is not default
+  gcp_compute_network:
+    name: net
+    auto_create_subnetworks: True
+    state: present
+  register: network
+
+- name: NAT address
+  gcp_compute_address:
+    name: address-nat
+    state: present
+  register: address
+
+- name: Allow ssh
+  gcp_compute_firewall:
+    name: ssh
+    network: "{{ network }}"
+    allowed:
+    - ip_protocol: tcp
+      ports:
+      - '22'
+    state: present
+
+- name: instance
+  gcp_compute_instance:
+    name: "{{ instance }}"
+    disks:
+    - auto_delete: 'true'
+      boot: 'true'
+      source: "{{ disk }}"
+    network_interfaces:
+    - network: "{{ network }}"
+      access_configs:
+      - name: External NAT
+        nat_ip: "{{ address }}"
+        type: ONE_TO_ONE_NAT
+    state: present
+
+

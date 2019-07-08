@@ -1,0 +1,53 @@
+---
+
+- name: Ansible issue 57934 on GCP
+  hosts: localhost
+  gather_facts: False
+
+  module_defaults:
+    group/gcp:
+      auth_kind: "{{ gcp_cred_kind }}"
+      project: "{{ gcp_project }}"
+      service_account_file: "{{ gcp_cred_file }}"
+    gcp_compute_address:
+      region: "{{ gcp_region }}"
+    gcp_compute_disk:
+      source_image: projects/freebsd-org-cloud-dev/global/images/family/freebsd-11-2
+      zone: "{{ gcp_zone }}"
+    gcp_compute_instance:
+      machine_type: f1-micro
+      zone: "{{ gcp_zone }}"
+
+  vars:
+    instance: "issue57934"
+
+  pre_tasks:
+  - debug:
+      var: gcp_cred_kind
+
+  roles:
+  - gcp-disk-net-address-instance
+
+  post_tasks:
+  - meta: refresh_inventory
+
+- name: Group instances by OS
+  hosts: all
+
+  tasks:
+  - name: group_by
+    tags: always
+    group_by:
+      key: "distro_{{ ansible_distribution }}"
+
+- name: FreeBSD
+  hosts: distro_FreeBSD
+
+  pre_tasks:
+  - debug:
+      var: ansible_distribution
+
+  roles:
+  - issue57934
+
+
