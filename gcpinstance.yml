@@ -15,7 +15,7 @@
       source_image: "{{ gcp_source_image | default(omit) }}"
       zone: "{{ gcp_zone }}"
     gcp_compute_instance:
-      machine_type: f1-micro
+      machine_type: "{{ gcp_machine_type | default('f1-micro') }}"
       zone: "{{ gcp_zone }}"
 
   vars:
