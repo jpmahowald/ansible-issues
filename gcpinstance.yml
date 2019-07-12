@@ -1,0 +1,47 @@
+---
+
+- name: Ansible issue reproduction on GCP
+  hosts: localhost
+  gather_facts: False
+
+  module_defaults:
+    group/gcp:
+      auth_kind: "{{ gcp_cred_kind }}"
+      project: "{{ gcp_project }}"
+      service_account_file: "{{ gcp_cred_file }}"
+    gcp_compute_address:
+      region: "{{ gcp_region }}"
+    gcp_compute_disk:
+      source_image: "{{ gcp_source_image }}"
+      zone: "{{ gcp_zone }}"
+    gcp_compute_instance:
+      machine_type: f1-micro
+      zone: "{{ gcp_zone }}"
+
+  vars:
+    instance: "issue{{ issue }}"
+
+  pre_tasks:
+  - debug:
+      msg: "https://github.com/ansible/ansible/issues/{{ issue }}"
+
+  roles:
+  - gcp-disk-net-address-instance
+
+  post_tasks:
+  - meta: refresh_inventory
+
+- name: Group instances by distribution
+  hosts: all
+
+  tasks:
+  - debug:
+      var: ansible_distribution
+      verbosity: 1
+
+  - name: group_by
+    tags: always
+    group_by:
+      key: "distro_{{ ansible_distribution }}"
+
+

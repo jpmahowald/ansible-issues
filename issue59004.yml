@@ -1,0 +1,11 @@
+---
+
+- name: Group host for vars
+  hosts: localhost
+  gather_facts: False
+  tasks:
+  - add_host:
+      host: localhost
+      groups: issue59004
+
+- import_playbook: gcpinstance.yml
