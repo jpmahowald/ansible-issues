@@ -9,3 +9,10 @@
       groups: issue59004
 
 - import_playbook: gcpinstance.yml
+
+- name: Can't install package Failed to validate the SSL certificate
+  hosts: distro_Ubuntu
+
+  roles:
+  - issue59004
+

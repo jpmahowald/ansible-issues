@@ -1,0 +1,8 @@
+---
+
+- name: Install metricbeat
+  become: True
+  apt:
+    deb: "https://repo.example.com/artifactory/elastic-stack/downloads/beats/metricbeat/metricbeat-6.6.2-amd64.deb"
+
+
