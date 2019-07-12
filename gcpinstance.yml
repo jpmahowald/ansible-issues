@@ -12,7 +12,7 @@
     gcp_compute_address:
       region: "{{ gcp_region }}"
     gcp_compute_disk:
-      source_image: "{{ gcp_source_image }}"
+      source_image: "{{ gcp_source_image | default(omit) }}"
       zone: "{{ gcp_zone }}"
     gcp_compute_instance:
       machine_type: f1-micro

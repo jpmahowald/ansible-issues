@@ -16,7 +16,7 @@
 
 - name: NAT address
   gcp_compute_address:
-    name: address-nat
+    name: "address-{{ instance }}"
     state: present
   register: address
 
@@ -44,5 +44,21 @@
         nat_ip: "{{ address }}"
         type: ONE_TO_ONE_NAT
     state: present
+
+- name: Clean up instance
+  tags:
+  - never
+  - delete
+  gcp_compute_instance:
+    name: "{{ instance }}"
+    state: absent
+
+- name: Clean up address
+  tags:
+  - never
+  - delete
+  gcp_compute_address:
+    name: "address-{{ instance }}"
+    state: absent
 
 

@@ -4,7 +4,8 @@
   hosts: localhost
   gather_facts: False
   tasks:
-  - add_host:
+  - tags: always
+    add_host:
       host: localhost
       groups: issue57283
 
