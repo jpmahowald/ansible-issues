@@ -1,0 +1,11 @@
+---
+
+- name: pacman -Sy
+  register: result
+  pacman:
+    update_cache: True
+
+- debug:
+    var: result
+
+

@@ -1,0 +1,19 @@
+---
+
+- name: Group host for vars
+  hosts: localhost
+  gather_facts: False
+  tasks:
+  - add_host:
+      host: localhost
+      groups: issue57283
+
+- import_playbook: gcpinstance.yml
+
+- name: pacman should report no change when updating a cache and no change was detected
+  hosts: distro_Archlinux
+  become: True
+
+  roles:
+  - issue57283
+
