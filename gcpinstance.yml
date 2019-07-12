@@ -25,6 +25,9 @@
   - debug:
       msg: "https://github.com/ansible/ansible/issues/{{ issue }}"
 
+  - debug:
+      msg: "Last known status: {{ last_known_status | default('unknown')  }}"
+
   roles:
   - gcp-disk-net-address-instance
 
