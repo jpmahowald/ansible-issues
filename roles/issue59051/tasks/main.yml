@@ -1,0 +1,24 @@
+---
+
+- name: get_file wrong checksum
+  register: result
+  ignore_errors: True
+  get_url:
+    url: https://cdn.arstechnica.net/favicon.ico
+    checksum: "sha1: 1234567890123456789012345678901234567890"
+    dest: /tmp/
+
+- debug:
+    var: result
+
+- name: get_file keep if wrong
+  register: result2
+  get_url:
+    url: https://cdn.arstechnica.net/favicon.ico
+    dest: /tmp/
+  failed_when: result2.checksum_src != "1234567890123456789012345678901234567890"
+
+- debug:
+    var: result2
+
+
