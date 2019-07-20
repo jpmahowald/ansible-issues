@@ -1,0 +1,11 @@
+---
+
+- apt_repository:
+    repo: ppa:trevorjay/pyflame
+    update_cache: True
+
+- name: install pyflame
+  apt:
+    name: pyflame
+
+

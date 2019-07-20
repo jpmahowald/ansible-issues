@@ -1,0 +1,4 @@
+issue: 24228
+gcp_source_image: projects/gce-uefi-images/global/images/family/centos-7
+# gcp_source_image: projects/gce-uefi-images/global/images/family/ubuntu-1804-lts
+

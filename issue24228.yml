@@ -1,0 +1,39 @@
+---
+
+- name: Group host for vars
+  hosts: localhost
+  gather_facts: False
+  tasks:
+  - add_host:
+      host: localhost
+      groups: issue24228
+
+- import_playbook: gcpinstance.yml
+
+- name: alias host
+  hosts: all:!localhost
+  gather_facts: False
+  tasks:
+  - add_host:
+      host: "perfevents"
+      ansible_host: "{{ inventory_hostname}}"
+
+- name: setup stage takes too long time on linux server host with large max-open-files config
+  hosts: all:!localhost
+  strategy: free
+  gather_facts: False
+  become: True
+  become_user: root
+
+  roles:
+  - gcp-repo-rm
+  - issue24228
+  - { role: juju4.flamegraph, when: "inventory_hostname is search('perfevents')" }
+
+  post_tasks:
+  - wait_for:
+      path: "{{ flamegraph_outdir }}/perf.data"
+  - setup:
+    when: "inventory_hostname is not search('perfevents')"
+
+

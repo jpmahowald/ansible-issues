@@ -1,0 +1,16 @@
+---
+- name: ulimit nofiles
+  template:
+    src: nofiles.conf
+    dest: /etc/security/limits.d/
+
+- name: file-max
+  sysctl:
+    name: fs.file-max
+    value: "{{ ( filemax | int ) * 8 }}"
+    sysctl_file: /etc/sysctl.d/filemax.conf
+    reload: True
+
+- include_tasks: "{{ ansible_os_family }}.yml"
+
+

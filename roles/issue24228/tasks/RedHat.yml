@@ -1,0 +1,24 @@
+---
+
+# TODO make work for Fedora and other EL versions
+- name: 
+  get_url:
+    url: https://copr.fedorainfracloud.org/coprs/eklitzke/pyflame/repo/epel-7/eklitzke-pyflame-epel-7.repo
+    dest: /etc/yum.repos.d/
+    checksum: sha1:88f73af57a73b3c84910c0f155e28dc76fe61fb2
+
+- name: pyflame
+  yum:
+    name: pyflame
+
+- name: python debuginfo
+  yum:
+    name: "{{ pythondebuginfo }}"
+    enablerepo: base-debuginfo
+    state: present
+  vars:
+    pythondebuginfo:
+    - glibc-debuginfo
+    - python-debuginfo
+
+

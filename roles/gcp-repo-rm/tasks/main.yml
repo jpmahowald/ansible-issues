@@ -1,0 +1,10 @@
+---
+
+- name: Remove temporarily broken repo google-cloud-sdk
+  become: True
+  become_user: root
+  file:
+    name: /etc/yum.repos.d/google-cloud.repo
+    state: absent
+
+
